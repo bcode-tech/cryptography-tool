@@ -1,0 +1,16 @@
+export const colors = {
+    primary: "#38A7B8",
+    secondary: "#FFFFFF",
+    transparentSecondary: "rgba(255, 255, 255, 30)",
+    lightPrimary: "#57BCCC",
+    transparentPrimary: "rgba(56, 167, 184, 60)",
+    lightGrey: "#EDF5F6",
+    transparentLightGrey: "rgba(237, 245, 246, 65)",
+    grey: "#DCDCDC",
+    disabled: "#E5E5E5",
+    black: "#1F2223",
+    gold: "#FFD700",
+    silver: "#C0C0C0",
+    bronze: "#CD7F32",
+    red: "#CD5656",
+};

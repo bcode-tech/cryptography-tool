@@ -1,0 +1,205 @@
+@import "../../styles/constants.scss";
+
+.home {
+    height: 100vh;
+    width: 100vw;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .topbar {
+        width: 100%;
+        height: 75px;
+        padding: 0 30px 0 30px;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .icon:hover {
+            cursor: pointer;
+        }
+    }
+
+    .container {
+        width: 80%;
+        height: 100%;
+
+        .result {
+            text-align: center;
+
+            .title {
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+            .subtitle {
+                font-size: 18px;
+                font-weight: 600;
+            }
+        }
+    }
+
+    .titleContainer {
+        width: 80%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .title {
+            flex: 1;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .selector {
+            display: flex;
+            border: 2px solid rgb(220, 220, 220);
+            border-radius: 10px;
+            overflow: hidden;
+
+            .divider {
+                border: 1px solid rgb(220, 220, 220);
+            }
+
+            .mode {
+                width: 100%;
+                height: 100%;
+                padding: 10px;
+                outline: none;
+
+                &.active {
+                    background-color: $primary;
+                }
+            }
+        }
+    }
+
+    .symmetric {
+        width: 100%;
+        height: 70%;
+        padding-top: 50px;
+        display: flex;
+        flex-wrap: wrap;
+
+        .inputKeyContainer {
+            display: flex;
+            width: 100%;
+    
+            .inputKey {
+                margin-right: 30px;
+            }
+        }
+    }
+
+    .asymmetric {
+        width: 100%;
+        height: 70%;
+        padding-top: 30px;
+        display: flex;
+        flex-wrap: wrap;
+
+        .inputKeyContainer {
+            width: 100%;
+            display: flex;
+
+            .keys {
+                width: 100%;
+                margin-right: 30px;
+
+                .key {
+                    width: 100%;
+
+                    &:last-child {
+                        margin-top: 20px;
+                    }
+                }
+            }
+        }
+    }
+
+    .mainarea {
+        width: 50%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 30px;
+
+        .title {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin: 10px;
+            width: 90%;
+            height: 60px;
+            border-radius: 7px;
+            padding: 0 10px 0 10px;
+
+            &.hashText {
+                width: unset;
+            }
+        }
+
+        .textarea {
+            width: 100%;
+            height: 250px;
+            max-width: 500px;
+            max-height: 250px;
+        }
+
+        .importLabel {
+            cursor: pointer;
+        }
+
+        .textHashButton {
+            margin-top: 30px;
+        }
+
+        &.asymmetric {
+            margin-top: 0;
+
+            .selectKeyContainer {
+                margin-top: 30px;
+                width: 250px;
+            }
+        }
+
+        @media only screen and (max-height: 700px) {
+            height: 65%;
+        }
+    }
+
+    .footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .in {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 30px 0 30px;
+
+            @media only screen and (max-width: 512px) {
+                justify-content: space-between;
+            }
+        }
+    }
+}
