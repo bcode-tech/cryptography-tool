@@ -160,6 +160,23 @@ function Home(props) {
                 >
                     BCode
                 </Text>
+                <Box className="selector">
+                    <Button
+                        className={`mode ${isAsymmetric ? "" : "active"}`}
+                        borderRadius={0}
+                        onClick={handleCryptographyMode}
+                    >
+                        {i18n.t("symmetric")}
+                    </Button>
+                    <Box className="divider"></Box>
+                    <Button
+                        className={`mode ${isAsymmetric ? "active" : ""}`}
+                        borderRadius={0}
+                        onClick={handleCryptographyMode}
+                    >
+                        {i18n.t("asymmetric")}
+                    </Button>
+                </Box>
                 {theme === "light" ? (
                     <MoonIcon
                         w={6}
@@ -186,28 +203,10 @@ function Home(props) {
                 theme={theme}
             /> */}
             <Box className="titleContainer">
-                <Box style={{ flex: 1 }}></Box>
                 <Box className="title">
                     <Text color={`${theme}.text`}>
                         {i18n.t("encrypt_text")}
                     </Text>
-                </Box>
-                <Box className="selector">
-                    <Button
-                        className={`mode ${isAsymmetric ? "" : "active"}`}
-                        borderRadius={0}
-                        onClick={handleCryptographyMode}
-                    >
-                        {i18n.t("symmetric")}
-                    </Button>
-                    <Box className="divider"></Box>
-                    <Button
-                        className={`mode ${isAsymmetric ? "active" : ""}`}
-                        borderRadius={0}
-                        onClick={handleCryptographyMode}
-                    >
-                        {i18n.t("asymmetric")}
-                    </Button>
                 </Box>
             </Box>
             {!isAsymmetric ? (
