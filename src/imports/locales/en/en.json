@@ -21,5 +21,14 @@
     "use_private_key": "Use private key",
     "select_key": "Select key",
     "encrypted_message": "Encrypted message",
-    "decrypted_message": "Decrypted message"
+    "decrypted_message": "Decrypted message",
+    "success_message": "Congratulations",
+    "error_message": "Check the fields",
+    "success_encrypt_message": "Message encrypted with success",
+    "error_encrypt_message": "Message not encrypted",
+    "success_decrypt_message": "Message decrypted with success",
+    "error_decrypt_message": "Message not decrypted",
+    "copy_to_clipboard": "Copy to clipboard",
+    "copied_on_clipboard": "Copied on clipboard",
+    "bcode": "BCode"
 }

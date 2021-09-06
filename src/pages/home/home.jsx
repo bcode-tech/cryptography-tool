@@ -9,6 +9,8 @@ import {
     Textarea,
     Input,
     Select,
+    useToast,
+    Tooltip,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 
@@ -35,7 +37,7 @@ let url = "/images/logo-bcode-white.png",
 
 function Home(props) {
     const { theme, changeTheme } = props;
-
+    const toast = useToast();
     // const [fileName, setFileName] = useState(false);    //TODO uncomment when file encrypt is finished
     // const [type, setType] = useState(true); //TODO change to 'false' when file encrypt is finished
     const [isAsymmetric, setIsAsymmetric] = useState(false);
@@ -114,15 +116,37 @@ function Home(props) {
         }
     };
 
+    const handleToast = (status, type) => {
+        const id = status + type;
+
+        if (!toast.isActive(id)) {
+            toast({
+                id,
+                status,
+                title: i18n.t(`${status}_${type}_message`),
+                description: i18n.t(`${status}_message`),
+                duration: 4000,
+                isClosable: true,
+                position: "top",
+            });
+        }
+    };
+
     const handleEncryptSymmetric = () => {
         if (encryptText !== "" && privateKey !== "") {
             setResult({ type: "encrypt", text: "Result" });
+            handleToast("success", "encrypt");
+        } else {
+            handleToast("error", "encrypt");
         }
     };
 
     const handleDecryptSymmetric = () => {
         if (decryptText !== "" && privateKey !== "") {
             setResult({ type: "decrypt", text: "Result" });
+            handleToast("success", "decrypt");
+        } else {
+            handleToast("error", "decrypt");
         }
     };
 
@@ -134,6 +158,9 @@ function Home(props) {
             encryptKey !== ""
         ) {
             setResult({ type: "encrypt", text: "Result" });
+            handleToast("success", "encrypt");
+        } else {
+            handleToast("error", "encrypt");
         }
     };
 
@@ -145,9 +172,27 @@ function Home(props) {
             decryptKey !== ""
         ) {
             setResult({ type: "decrypt", text: "Result" });
+            handleToast("success", "decrypt");
+        } else {
+            handleToast("error", "decrypt");
         }
     };
-    console.log(result);
+
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(result.text);
+
+        if (!toast.isActive("copiedToClipboard")) {
+            toast({
+                id: "copiedToClipboard",
+                status: "success",
+                title: i18n.t("copied_on_clipboard"),
+                duration: 4000,
+                isClosable: true,
+                position: "top",
+            });
+        }
+    };
+
     return (
         <Box className="home" bg={`${theme}.bg`}>
             <Box bg={`${theme}.topbar`} className={"topbar"}>
@@ -158,7 +203,7 @@ function Home(props) {
                         window.open("https://bcode.cloud");
                     }}
                 >
-                    BCode
+                    {i18n.t("bcode")}
                 </Text>
                 <Box className="selector">
                     <Button
@@ -270,13 +315,41 @@ function Home(props) {
                     {result ? (
                         result.type === "encrypt" ? (
                             <Box className="result">
-                                <Text className='title' color={`${theme}.text`}>{i18n.t("encrypted_message")}</Text>
-                                <Text className='subtitle' color={`${theme}.text`}>{result.text}</Text>
+                                <Text className="title" color={`${theme}.text`}>
+                                    {i18n.t("encrypted_message")}
+                                </Text>
+                                <Tooltip
+                                    label={i18n.t("copy_to_clipboard")}
+                                    hasArrow
+                                    placement="top"
+                                >
+                                    <Text
+                                        className="subtitle"
+                                        color={`${theme}.text`}
+                                        onClick={copyToClipboard}
+                                    >
+                                        {result.text}
+                                    </Text>
+                                </Tooltip>
                             </Box>
                         ) : (
                             <Box className="result">
-                                <Text className='title' color={`${theme}.text`}>{i18n.t("decrypted_message")}</Text>
-                                <Text className='subtitle' color={`${theme}.text`}>{result.text}</Text>
+                                <Text className="title" color={`${theme}.text`}>
+                                    {i18n.t("decrypted_message")}
+                                </Text>
+                                <Tooltip
+                                    label={i18n.t("copy_to_clipboard")}
+                                    hasArrow
+                                    placement="top"
+                                >
+                                    <Text
+                                        className="subtitle"
+                                        color={`${theme}.text`}
+                                        onClick={copyToClipboard}
+                                    >
+                                        {result.text}
+                                    </Text>
+                                </Tooltip>
                             </Box>
                         )
                     ) : null}
@@ -382,13 +455,42 @@ function Home(props) {
                     {result ? (
                         result.type === "encrypt" ? (
                             <Box className="result">
-                                <Text className='title' color={`${theme}.text`}>{i18n.t("encrypted_message")}</Text>
-                                <Text className='subtitle' color={`${theme}.text`}>{result.text}</Text>
+                                <Text className="title" color={`${theme}.text`}>
+                                    {i18n.t("encrypted_message")}
+                                </Text>
+                                <Tooltip label={i18n.t("copy_to_clipboard")}>
+                                    <Text
+                                        className="subtitle"
+                                        color={`${theme}.text`}
+                                        onClick={copyToClipboard}
+                                    >
+                                        {result.text}
+                                    </Text>
+                                </Tooltip>
                             </Box>
                         ) : (
                             <Box className="result">
-                                <Text className='title' color={`${theme}.text`}>{i18n.t("decrypted_message")}</Text>
-                                <Text className='subtitle' color={`${theme}.text`}>{result.text}</Text>
+                                <Text
+                                    className="title"
+                                    color={`${theme}.text`}
+                                    hasArrow
+                                    placement="top"
+                                >
+                                    {i18n.t("decrypted_message")}
+                                </Text>
+                                <Tooltip
+                                    label={i18n.t("copy_to_clipboard")}
+                                    hasArrow
+                                    placement="top"
+                                >
+                                    <Text
+                                        className="subtitle"
+                                        color={`${theme}.text`}
+                                        onClick={copyToClipboard}
+                                    >
+                                        {result.text}
+                                    </Text>
+                                </Tooltip>
                             </Box>
                         )
                     ) : null}
