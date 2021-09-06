@@ -13,6 +13,7 @@ import {
     Tooltip,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import eccrypto from "eccrypto";
 
 //Redux
 import { connect } from "react-redux";
@@ -25,7 +26,11 @@ import * as Actions from "../../redux/actions";
 import i18n from "../../imports/i18n";
 
 // Imports
-import { usePlatformDetector } from "../../imports/utils";
+import {
+    usePlatformDetector,
+    symmetricEncryptData,
+    symmetricDecryptData,
+} from "../../imports/utils";
 import { VERSION } from "../../imports/config";
 
 //style
@@ -134,8 +139,17 @@ function Home(props) {
 
     const handleEncryptSymmetric = () => {
         if (encryptText !== "" && privateKey !== "") {
-            setResult({ type: "encrypt", text: "Result" });
-            handleToast("success", "encrypt");
+            try {
+                const encryptedMessage = symmetricEncryptData(
+                    encryptText,
+                    privateKey,
+                );
+                setResult({ type: "encrypt", text: encryptedMessage });
+                handleToast("success", "encrypt");
+            } catch (error) {
+                console.log(error);
+                handleToast("error", "encrypt");
+            }
         } else {
             handleToast("error", "encrypt");
         }
@@ -143,8 +157,18 @@ function Home(props) {
 
     const handleDecryptSymmetric = () => {
         if (decryptText !== "" && privateKey !== "") {
-            setResult({ type: "decrypt", text: "Result" });
-            handleToast("success", "decrypt");
+            try {
+                const decryptedMessage = symmetricDecryptData(
+                    decryptText,
+                    privateKey,
+                );
+
+                setResult({ type: "decrypt", text: decryptedMessage });
+                handleToast("success", "decrypt");
+            } catch (error) {
+                console.log(error);
+                handleToast("error", "decrypt");
+            }
         } else {
             handleToast("error", "decrypt");
         }
@@ -191,6 +215,12 @@ function Home(props) {
                 position: "top",
             });
         }
+    };
+
+    const generatePrivateKey = () => {
+        const newPrivateKey = eccrypto.generatePrivate();
+        // const newPublicKey = eccrypto.getPublic(newPrivateKey);
+        setPrivateKey(newPrivateKey.toString("hex"));
     };
 
     return (
@@ -261,12 +291,14 @@ function Home(props) {
                             <Input
                                 className="inputKey"
                                 placeholder={i18n.t("private_key")}
+                                value={privateKey}
                                 onChange={e => setPrivateKey(e.target.value)}
                                 color={`${theme}.text`}
                             />
                             <Button
                                 bg={`${theme}.button`}
                                 className="generateKeyBtn"
+                                onClick={generatePrivateKey}
                             >
                                 {i18n.t("generate")}
                             </Button>
