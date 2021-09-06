@@ -30,6 +30,8 @@ import {
     usePlatformDetector,
     symmetricEncryptData,
     symmetricDecryptData,
+    encryptAsymmetricData,
+    decryptAsymmetricData,
 } from "../../imports/utils";
 import { VERSION } from "../../imports/config";
 
@@ -98,6 +100,8 @@ function Home(props) {
         setDecryptText("");
         setDecryptKey("");
         setEncryptKey("");
+        setPrivateKey("");
+        setPublicKey("");
         setResult(null);
     };
 
@@ -174,29 +178,50 @@ function Home(props) {
         }
     };
 
-    const handleEncryptAsymmetric = () => {
+    const handleEncryptAsymmetric = async () => {
         if (
             encryptText !== "" &&
             privateKey !== "" &&
             publicKey !== "" &&
             encryptKey !== ""
         ) {
-            setResult({ type: "encrypt", text: "Result" });
-            handleToast("success", "encrypt");
+            try {
+                const encryptedResult = await encryptAsymmetricData(
+                    encryptText,
+                    publicKey,
+                );
+
+                setResult({
+                    type: "encrypt",
+                    text: encryptedResult,
+                });
+                handleToast("success", "encrypt");
+            } catch (error) {
+                handleToast("error", "encrypt");
+            }
         } else {
             handleToast("error", "encrypt");
         }
     };
 
-    const handleDecryptAsymmetric = () => {
+    const handleDecryptAsymmetric = async () => {
         if (
             decryptText !== "" &&
             privateKey !== "" &&
             publicKey !== "" &&
             decryptKey !== ""
         ) {
-            setResult({ type: "decrypt", text: "Result" });
-            handleToast("success", "decrypt");
+            try {
+                const decryptedResult = await decryptAsymmetricData(
+                    decryptText,
+                    privateKey,
+                );
+
+                setResult({ type: "decrypt", text: decryptedResult });
+                handleToast("success", "decrypt");
+            } catch (error) {
+                handleToast("error", "decrypt");
+            }
         } else {
             handleToast("error", "decrypt");
         }
@@ -219,8 +244,15 @@ function Home(props) {
 
     const generatePrivateKey = () => {
         const newPrivateKey = eccrypto.generatePrivate();
-        // const newPublicKey = eccrypto.getPublic(newPrivateKey);
         setPrivateKey(newPrivateKey.toString("hex"));
+    };
+
+    const generatePairKey = () => {
+        const newPrivateKey = eccrypto.generatePrivate();
+        const newPublicKey = eccrypto.getPublic(newPrivateKey);
+
+        setPrivateKey(newPrivateKey.toString("hex"));
+        setPublicKey(newPublicKey.toString("hex"));
     };
 
     return (
@@ -290,7 +322,7 @@ function Home(props) {
                         <Box className="inputKeyContainer">
                             <Input
                                 className="inputKey"
-                                placeholder={i18n.t("private_key")}
+                                placeholder={i18n.t("secret_key")}
                                 value={privateKey}
                                 onChange={e => setPrivateKey(e.target.value)}
                                 color={`${theme}.text`}
@@ -396,6 +428,7 @@ function Home(props) {
                                     placeholder={i18n.t("public_key")}
                                     onChange={e => setPublicKey(e.target.value)}
                                     color={`${theme}.text`}
+                                    value={publicKey}
                                 />
                                 <Input
                                     className="key"
@@ -404,11 +437,13 @@ function Home(props) {
                                         setPrivateKey(e.target.value)
                                     }
                                     color={`${theme}.text`}
+                                    value={privateKey}
                                 />
                             </Box>
                             <Button
                                 bg={`${theme}.button`}
                                 className="generateKeyBtn"
+                                onClick={generatePairKey}
                             >
                                 {i18n.t("generate")}
                             </Button>
@@ -505,7 +540,6 @@ function Home(props) {
                                 <Text
                                     className="title"
                                     color={`${theme}.text`}
-                                    hasArrow
                                     placement="top"
                                 >
                                     {i18n.t("decrypted_message")}

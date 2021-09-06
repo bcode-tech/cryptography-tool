@@ -16,23 +16,28 @@ export const usePlatformDetector = () => {
 };
 
 export async function encryptAsymmetricData(file, pubKey) {
-    try {
-        let publicKey = Buffer.from(pubKey.replace("0x", ""), "hex");
+    const publicKey = Buffer.from(pubKey, "hex");
 
-        const encrypted = await encrypt(publicKey, file);
-        return encrypted;
-    } catch (err) {
-        console.log(err);
-        return null;
+    let encrypted = await encrypt(publicKey, Buffer.from(file));
+    for (let key in encrypted) {
+        encrypted[key] = encrypted[key].toString("hex");
     }
+
+    encrypted = btoa(JSON.stringify(encrypted));
+
+    return encrypted;
 }
 
 export async function decryptAsymmetricData(file, privKey) {
     try {
-        let privateKey = Buffer.from(privKey.replace("0x", ""), "hex");
+        const encrypted = JSON.parse(atob(file));
+        const privateKey = Buffer.from(privKey, "hex");
+        for (let key in encrypted) {
+            encrypted[key] = Buffer.from(encrypted[key], "hex");
+        }
 
-        const decrypted = await decrypt(privateKey, file);
-        return decrypted;
+        const decrypted = await decrypt(privateKey, encrypted);
+        return decrypted.toString();
     } catch (err) {
         console.log(err);
         return null;
