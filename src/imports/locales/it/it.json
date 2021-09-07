@@ -30,5 +30,6 @@
     "error_decrypt_message": "Messaggio non decifrato",
     "copy_to_clipboard": "Copia",
     "copied_on_clipboard": "Copiato",
-    "bcode": "BCode"
+    "bcode": "BCode",
+    "secret_key": "Chiave segreta"
 }
