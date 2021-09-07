@@ -8,6 +8,28 @@
     flex-direction: column;
     align-items: center;
 
+    .selector {
+        display: flex;
+        border: 2px solid rgb(220, 220, 220);
+        border-radius: 10px;
+        overflow: hidden;
+
+        .divider {
+            border: 1px solid rgb(220, 220, 220);
+        }
+
+        .mode {
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            outline: none;
+
+            &.active {
+                background-color: $primary;
+            }
+        }
+    }
+
     .topbar {
         width: 100%;
         height: 75px;
@@ -25,28 +47,6 @@
         .icon:hover {
             cursor: pointer;
         }
-
-        .selector {
-            display: flex;
-            border: 2px solid rgb(220, 220, 220);
-            border-radius: 10px;
-            overflow: hidden;
-
-            .divider {
-                border: 1px solid rgb(220, 220, 220);
-            }
-
-            .mode {
-                width: 100%;
-                height: 100%;
-                padding: 10px;
-                outline: none;
-
-                &.active {
-                    background-color: $primary;
-                }
-            }
-        }
     }
 
     .container {
@@ -54,7 +54,7 @@
         height: 100%;
 
         .result {
-            max-height: 140px;
+            max-height: 150px;
             overflow: scroll;
             text-align: center;
 
@@ -71,6 +71,10 @@
                     cursor: pointer;
                 }
             }
+
+            @media only screen and (max-width: 512px) {
+                margin-top: 30px;
+            }
         }
     }
 
@@ -84,12 +88,16 @@
             font-size: 24px;
             font-weight: bold;
         }
+
+        @media only screen and (max-width: 512px) {
+            margin-top: 30px;
+        }
     }
 
     .symmetric {
         width: 100%;
         height: 70%;
-        padding-top: 50px;
+        padding-top: 30px;
         display: flex;
         flex-wrap: wrap;
 
@@ -100,6 +108,11 @@
             .inputKey {
                 margin-right: 30px;
             }
+        }
+
+        @media only screen and (max-width: 512px) {
+            flex-direction: column;
+            flex-wrap: nowrap;
         }
     }
 
@@ -163,6 +176,10 @@
             height: 250px;
             max-width: 500px;
             max-height: 250px;
+
+            @media only screen and (max-width: 768px) {
+                max-width: 250px;
+            }
         }
 
         .importLabel {
@@ -185,6 +202,10 @@
         @media only screen and (max-height: 700px) {
             height: 65%;
         }
+
+        @media only screen and (max-width: 512px) {
+            width: 100%;
+        }
     }
 
     .footer {
@@ -201,10 +222,20 @@
             display: flex;
             align-items: center;
             padding: 0 30px 0 30px;
+        }
 
-            @media only screen and (max-width: 512px) {
-                justify-content: space-between;
+        @media only screen and (max-width: 512px) {
+            position: fixed;
+
+            .in {
+                justify-content: center;
             }
         }
+    }
+
+    @media only screen and (max-width: 512px) {
+        height: unset;
+        min-height: 100vh;
+        padding-bottom: 70px;
     }
 }
