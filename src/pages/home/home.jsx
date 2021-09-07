@@ -8,7 +8,7 @@ import {
     Box,
     Textarea,
     Input,
-    Select,
+    // Select,
     useToast,
     Tooltip,
 } from "@chakra-ui/react";
@@ -50,8 +50,8 @@ function Home(props) {
     const [isAsymmetric, setIsAsymmetric] = useState(false);
     const [encryptText, setEncryptText] = useState("");
     const [decryptText, setDecryptText] = useState("");
-    const [encryptKey, setEncryptKey] = useState("");
-    const [decryptKey, setDecryptKey] = useState("");
+    //  const [encryptKey, setEncryptKey] = useState("");
+    //  const [decryptKey, setDecryptKey] = useState("");
     const [publicKey, setPublicKey] = useState("");
     const [privateKey, setPrivateKey] = useState("");
     const [result, setResult] = useState(null);
@@ -98,14 +98,14 @@ function Home(props) {
         setIsAsymmetric(prev => !prev);
         setEncryptText("");
         setDecryptText("");
-        setDecryptKey("");
-        setEncryptKey("");
+        //  setDecryptKey("");
+        //  setEncryptKey("");
         setPrivateKey("");
         setPublicKey("");
         setResult(null);
     };
 
-    const handleSelectKeys = e => {
+    /* const handleSelectKeys = e => {
         const { value, id } = e.target;
 
         if (id === "encrypt") {
@@ -113,7 +113,7 @@ function Home(props) {
         } else if (id === "decrypt") {
             setDecryptKey(value);
         }
-    };
+    }; */
 
     const handleText = e => {
         const { value, id } = e.target;
@@ -141,6 +141,13 @@ function Home(props) {
         }
     };
 
+    const mobileScrollToResult = () => {
+        if (platform === "isMobile") {
+            const resultElement = document.getElementById("result");
+            resultElement.scrollIntoView({ behavior: "smooth" });
+        }
+    };
+
     const handleEncryptSymmetric = () => {
         if (encryptText !== "" && privateKey !== "") {
             try {
@@ -149,6 +156,7 @@ function Home(props) {
                     privateKey,
                 );
                 setResult({ type: "encrypt", text: encryptedMessage });
+                mobileScrollToResult();
                 handleToast("success", "encrypt");
             } catch (error) {
                 console.log(error);
@@ -168,6 +176,7 @@ function Home(props) {
                 );
 
                 setResult({ type: "decrypt", text: decryptedMessage });
+                mobileScrollToResult();
                 handleToast("success", "decrypt");
             } catch (error) {
                 console.log(error);
@@ -182,8 +191,8 @@ function Home(props) {
         if (
             encryptText !== "" &&
             privateKey !== "" &&
-            publicKey !== "" &&
-            encryptKey !== ""
+            publicKey !== "" /*&&
+            encryptKey !== ""*/
         ) {
             try {
                 const encryptedResult = await encryptAsymmetricData(
@@ -195,6 +204,7 @@ function Home(props) {
                     type: "encrypt",
                     text: encryptedResult,
                 });
+                mobileScrollToResult();
                 handleToast("success", "encrypt");
             } catch (error) {
                 handleToast("error", "encrypt");
@@ -208,8 +218,8 @@ function Home(props) {
         if (
             decryptText !== "" &&
             privateKey !== "" &&
-            publicKey !== "" &&
-            decryptKey !== ""
+            publicKey !== "" /*&&
+            decryptKey !== ""*/
         ) {
             try {
                 const decryptedResult = await decryptAsymmetricData(
@@ -218,6 +228,7 @@ function Home(props) {
                 );
 
                 setResult({ type: "decrypt", text: decryptedResult });
+                mobileScrollToResult();
                 handleToast("success", "decrypt");
             } catch (error) {
                 handleToast("error", "decrypt");
@@ -267,23 +278,25 @@ function Home(props) {
                 >
                     {i18n.t("bcode")}
                 </Text>
-                <Box className="selector">
-                    <Button
-                        className={`mode ${isAsymmetric ? "" : "active"}`}
-                        borderRadius={0}
-                        onClick={handleCryptographyMode}
-                    >
-                        {i18n.t("symmetric")}
-                    </Button>
-                    <Box className="divider"></Box>
-                    <Button
-                        className={`mode ${isAsymmetric ? "active" : ""}`}
-                        borderRadius={0}
-                        onClick={handleCryptographyMode}
-                    >
-                        {i18n.t("asymmetric")}
-                    </Button>
-                </Box>
+                {platform !== "isMobile" && (
+                    <Box className="selector">
+                        <Button
+                            className={`mode ${isAsymmetric ? "" : "active"}`}
+                            borderRadius={0}
+                            onClick={handleCryptographyMode}
+                        >
+                            {i18n.t("symmetric")}
+                        </Button>
+                        <Box className="divider"></Box>
+                        <Button
+                            className={`mode ${isAsymmetric ? "active" : ""}`}
+                            borderRadius={0}
+                            onClick={handleCryptographyMode}
+                        >
+                            {i18n.t("asymmetric")}
+                        </Button>
+                    </Box>
+                )}
                 {theme === "light" ? (
                     <MoonIcon
                         w={6}
@@ -309,6 +322,25 @@ function Home(props) {
                 onChange={setType}
                 theme={theme}
             /> */}
+            {platform === "isMobile" && (
+                <Box className="selector">
+                    <Button
+                        className={`mode ${isAsymmetric ? "" : "active"}`}
+                        borderRadius={0}
+                        onClick={handleCryptographyMode}
+                    >
+                        {i18n.t("symmetric")}
+                    </Button>
+                    <Box className="divider"></Box>
+                    <Button
+                        className={`mode ${isAsymmetric ? "active" : ""}`}
+                        borderRadius={0}
+                        onClick={handleCryptographyMode}
+                    >
+                        {i18n.t("asymmetric")}
+                    </Button>
+                </Box>
+            )}
             <Box className="titleContainer">
                 <Box className="title">
                     <Text color={`${theme}.text`}>
@@ -391,6 +423,7 @@ function Home(props) {
                                         className="subtitle"
                                         color={`${theme}.text`}
                                         onClick={copyToClipboard}
+                                        id="result"
                                     >
                                         {result.text}
                                     </Text>
@@ -410,6 +443,7 @@ function Home(props) {
                                         className="subtitle"
                                         color={`${theme}.text`}
                                         onClick={copyToClipboard}
+                                        id="result"
                                     >
                                         {result.text}
                                     </Text>
@@ -459,7 +493,7 @@ function Home(props) {
                                 color={`${theme}.textAreaColor`}
                                 id="encryptText"
                             />
-                            <Box className="selectKeyContainer">
+                            {/* <Box className="selectKeyContainer">
                                 <Select
                                     placeholder={i18n.t("select_key")}
                                     onChange={handleSelectKeys}
@@ -473,7 +507,7 @@ function Home(props) {
                                         {i18n.t("use_private_key")}
                                     </option>
                                 </Select>
-                            </Box>
+                            </Box> */}
                             <Button
                                 bg={`${theme}.button`}
                                 size="lg"
@@ -494,7 +528,7 @@ function Home(props) {
                                 color={`${theme}.textAreaColor`}
                                 id="decryptText"
                             />
-                            <Box className="selectKeyContainer">
+                            {/* <Box className="selectKeyContainer">
                                 <Select
                                     placeholder={i18n.t("select_key")}
                                     onChange={handleSelectKeys}
@@ -508,7 +542,7 @@ function Home(props) {
                                         {i18n.t("use_private_key")}
                                     </option>
                                 </Select>
-                            </Box>
+                            </Box> */}
                             <Button
                                 bg={`${theme}.button`}
                                 size="lg"
@@ -530,6 +564,7 @@ function Home(props) {
                                         className="subtitle"
                                         color={`${theme}.text`}
                                         onClick={copyToClipboard}
+                                        id="result"
                                     >
                                         {result.text}
                                     </Text>
@@ -553,6 +588,7 @@ function Home(props) {
                                         className="subtitle"
                                         color={`${theme}.text`}
                                         onClick={copyToClipboard}
+                                        id="result"
                                     >
                                         {result.text}
                                     </Text>
