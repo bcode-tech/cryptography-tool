@@ -30,5 +30,6 @@
     "error_decrypt_message": "Message not decrypted",
     "copy_to_clipboard": "Copy to clipboard",
     "copied_on_clipboard": "Copied on clipboard",
-    "bcode": "BCode"
+    "bcode": "BCode",
+    "secret_key": "Secret Key"
 }
