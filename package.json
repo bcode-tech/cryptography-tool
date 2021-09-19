@@ -19,7 +19,7 @@
     "fs": "0.0.1-security",
     "i18next": "^20.2.1",
     "immer": "^9.0.1",
-    "node-sass": "^5.0.0",
+    "node-sass": "^6.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-dropzone": "^11.3.2",
@@ -29,6 +29,7 @@
     "redux": "^4.0.5",
     "redux-immer": "^1.0.5",
     "redux-persist": "^6.0.0",
+    "sass-loader": "^12.1.0",
     "web-vitals": "^1.1.1"
   },
   "scripts": {
