@@ -1,6 +1,7 @@
 import { useMediaQuery } from "@chakra-ui/react";
 import { encrypt, decrypt } from "eccrypto";
 import crypto from "crypto";
+import eccrypto from "eccrypto";
 
 export const usePlatformDetector = () => {
     const [isTablet] = useMediaQuery(["(max-width: 1024px)"]);
@@ -42,6 +43,25 @@ export async function decryptAsymmetricData(file, privKey) {
         console.log(err);
         return null;
     }
+}
+
+export async function encryptWithPrivate(file, privateKey) {
+    // const signature = crypto.sign("sha256", Buffer.from(file), {
+    //     key: privateKey,
+    //     padding: crypto.constants.RSA_PKCS1_PSS_PADDING,
+    // });
+
+    return (
+        await eccrypto.sign(Buffer.from(privateKey, "hex"), Buffer.from(file))
+    ).toString("hex");
+}
+
+export async function decryptWithPublic(data, sign, publicKey) {
+    return await eccrypto.verify(
+        Buffer.from(publicKey, "hex"),
+        Buffer.from(data),
+        Buffer.from(sign, "hex"),
+    );
 }
 
 export function symmetricEncryptData(data, hashedPassword) {

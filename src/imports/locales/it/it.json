@@ -28,6 +28,8 @@
     "error_encrypt_message": "Messaggio non cifrato",
     "success_decrypt_message": "Messaggio decifrato",
     "error_decrypt_message": "Messaggio non decifrato",
+    "success_verifiedSignature_message": "Signature verficata",
+    "error_verifiedSignature_message": "Signature non verificata",
     "copy_to_clipboard": "Copia",
     "copied_on_clipboard": "Copiato",
     "bcode": "BCode",

@@ -11,9 +11,11 @@ import {
     // Select,
     useToast,
     Tooltip,
+    Select,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import eccrypto from "eccrypto";
+import crypto from "crypto";
 
 //Redux
 import { connect } from "react-redux";
@@ -32,6 +34,8 @@ import {
     symmetricDecryptData,
     encryptAsymmetricData,
     decryptAsymmetricData,
+    encryptWithPrivate,
+    decryptWithPublic,
 } from "../../imports/utils";
 import { VERSION } from "../../imports/config";
 
@@ -50,8 +54,8 @@ function Home(props) {
     const [isAsymmetric, setIsAsymmetric] = useState(false);
     const [encryptText, setEncryptText] = useState("");
     const [decryptText, setDecryptText] = useState("");
-    //  const [encryptKey, setEncryptKey] = useState("");
-    //  const [decryptKey, setDecryptKey] = useState("");
+    const [encryptKey, setEncryptKey] = useState("public");
+    const [decryptKey, setDecryptKey] = useState("private");
     const [publicKey, setPublicKey] = useState("");
     const [privateKey, setPrivateKey] = useState("");
     const [result, setResult] = useState(null);
@@ -59,6 +63,8 @@ function Home(props) {
     const selectTheme = () => {
         changeTheme(theme === "light" ? "dark" : "light");
     };
+
+    const key = { private: privateKey, public: publicKey };
 
     // const loadFile = async file => {     //TODO uncomment when file encrypt is finished
     //     let reader = new FileReader();
@@ -191,19 +197,26 @@ function Home(props) {
         if (
             encryptText !== "" &&
             privateKey !== "" &&
-            publicKey !== "" /*&&
-            encryptKey !== ""*/
+            publicKey !== "" &&
+            encryptKey !== ""
         ) {
             try {
-                const encryptedResult = await encryptAsymmetricData(
-                    encryptText,
-                    publicKey,
-                );
+                if (encryptKey === "public") {
+                    const encryptedResult = await encryptAsymmetricData(
+                        encryptText,
+                        key[encryptKey],
+                    );
 
-                setResult({
-                    type: "encrypt",
-                    text: encryptedResult,
-                });
+                    setResult({
+                        type: "encrypt",
+                        text: encryptedResult,
+                    });
+                } else {
+                    setResult({
+                        type: "encrypt",
+                        text: await encryptWithPrivate(encryptText, privateKey),
+                    });
+                }
                 mobileScrollToResult();
                 handleToast("success", "encrypt");
             } catch (error) {
@@ -218,20 +231,37 @@ function Home(props) {
         if (
             decryptText !== "" &&
             privateKey !== "" &&
-            publicKey !== "" /*&&
-            decryptKey !== ""*/
+            publicKey !== "" &&
+            decryptKey !== "" &&
+            encryptKey !== decryptKey
         ) {
             try {
-                const decryptedResult = await decryptAsymmetricData(
-                    decryptText,
-                    privateKey,
-                );
+                if (decryptKey === "private") {
+                    const decryptedResult = await decryptAsymmetricData(
+                        decryptText,
+                        key[decryptKey],
+                    );
 
-                setResult({ type: "decrypt", text: decryptedResult });
+                    setResult({ type: "decrypt", text: decryptedResult });
+                    handleToast("success", "decrypt");
+                } else {
+                    setResult({
+                        type: "decrypt",
+                        text: await decryptWithPublic(
+                            encryptText,
+                            decryptText,
+                            publicKey,
+                        ),
+                    });
+                    handleToast("success", "verifiedSignature");
+                }
                 mobileScrollToResult();
-                handleToast("success", "decrypt");
             } catch (error) {
-                handleToast("error", "decrypt");
+                if (encryptKey === "key") {
+                    handleToast("error", "encrypt");
+                } else {
+                    handleToast("error", "verifiedSignature");
+                }
             }
         } else {
             handleToast("error", "decrypt");
@@ -493,21 +523,24 @@ function Home(props) {
                                 color={`${theme}.textAreaColor`}
                                 id="encryptText"
                             />
-                            {/* <Box className="selectKeyContainer">
+                            <Box className="selectKeyContainer">
                                 <Select
+                                    defaultValue={encryptKey}
                                     placeholder={i18n.t("select_key")}
-                                    onChange={handleSelectKeys}
+                                    onChange={e =>
+                                        setEncryptKey(e.target.value)
+                                    }
                                     id="encrypt"
                                     color={`${theme}.text`}
                                 >
-                                    <option value="public_key">
+                                    <option value="public">
                                         {i18n.t("use_public_key")}
                                     </option>
-                                    <option value="private_key">
+                                    <option value="private">
                                         {i18n.t("use_private_key")}
                                     </option>
                                 </Select>
-                            </Box> */}
+                            </Box>
                             <Button
                                 bg={`${theme}.button`}
                                 size="lg"
@@ -528,21 +561,24 @@ function Home(props) {
                                 color={`${theme}.textAreaColor`}
                                 id="decryptText"
                             />
-                            {/* <Box className="selectKeyContainer">
+                            <Box className="selectKeyContainer">
                                 <Select
+                                    defaultValue={decryptKey}
                                     placeholder={i18n.t("select_key")}
-                                    onChange={handleSelectKeys}
+                                    onChange={e =>
+                                        setDecryptKey(e.target.value)
+                                    }
                                     id="decrypt"
                                     color={`${theme}.text`}
                                 >
-                                    <option value="public_key">
+                                    <option value="public">
                                         {i18n.t("use_public_key")}
                                     </option>
-                                    <option value="private_key">
+                                    <option value="private">
                                         {i18n.t("use_private_key")}
                                     </option>
                                 </Select>
-                            </Box> */}
+                            </Box>
                             <Button
                                 bg={`${theme}.button`}
                                 size="lg"
