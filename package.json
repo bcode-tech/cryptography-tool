@@ -1,6 +1,6 @@
 {
   "name": "bcode-cryptography-tool",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "dependencies": {
     "@chakra-ui/icons": "^1.0.9",
