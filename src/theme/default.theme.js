@@ -1,11 +1,11 @@
 const colors = {
     light: {
         bg: "#ffffff",
-        topbar: "#1f2223",
+        topbar: "#211B2B",
         colorSelector: "#fcec00",
         logo: "#365088",
-        text: "#000000",
-        textBg: "#ffffff",
+        text: "#211B2B",
+        textBg: "#DAEDE5",
         dragandrop: "#EDF5F6",
         button: "#365088",
         textAreaColor: "#000",
@@ -13,10 +13,10 @@ const colors = {
     },
     dark: {
         bg: "#1F2223",
-        topbar: "#365088",
+        topbar: "#211B2B",
         colorSelector: "#fcec00",
         logo: "#1f2223",
-        text: "#ffffff",
+        text: "#DAEDE5",
         textBg: "#40474a",
         dragandrop: "#4e5152",
         button: "#365088",
