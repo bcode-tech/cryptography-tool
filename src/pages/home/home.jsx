@@ -15,7 +15,6 @@ import {
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import eccrypto from "eccrypto";
-import crypto from "crypto";
 
 //Redux
 import { connect } from "react-redux";
@@ -299,15 +298,14 @@ function Home(props) {
     return (
         <Box className="home" bg={`${theme}.bg`}>
             <Box bg={`${theme}.topbar`} className={"topbar"}>
-                <Text
-                    color={`${theme}.logo`}
-                    className={"title"}
+                <Image
+                    src={url}
+                    h={platform === "isDesktop" ? "40px" : "25px"}
+                    marginLeft={marginPowered}
                     onClick={() => {
                         window.open("https://bcode.cloud");
                     }}
-                >
-                    {i18n.t("bcode")}
-                </Text>
+                />
                 {platform !== "isMobile" && (
                     <Box className="selector">
                         <Button
@@ -345,13 +343,7 @@ function Home(props) {
                     />
                 )}
             </Box>
-            {/* <DoubleSwitch
-                leftValue={i18n.t("file")}
-                rightValue={i18n.t("text")}
-                value={type}
-                onChange={setType}
-                theme={theme}
-            /> */}
+
             {platform === "isMobile" && (
                 <Box className="selector">
                     <Button
@@ -379,7 +371,7 @@ function Home(props) {
                 </Box>
             </Box>
             {!isAsymmetric ? (
-                <Box className="container">
+                <Box className="container" bg={`${theme}.bg`}>
                     <Box className="symmetric">
                         <Box className="inputKeyContainer">
                             <Input
@@ -781,7 +773,7 @@ function Home(props) {
 
             <Box
                 className={"footer"}
-                height={platform === "isDesktop" ? "75px" : "50px"}
+                // height={platform === "isDesktop" ? "75px" : "50px"}
             >
                 <Box
                     className={"in"}
@@ -797,47 +789,35 @@ function Home(props) {
                         platform === "isDesktop" ? "space-between" : "center"
                     }
                 >
+                    <Box className="element" onClick={() => window.open(link)}>
+                        <Text className="text-white">Powered by </Text>
+                        <Image
+                            src={url}
+                            h={platform === "isDesktop" ? "40px" : "25px"}
+                            marginLeft={marginPowered}
+                        />
+                    </Box>
                     {platform !== "isMobile" && (
-                        <Box style={{ ...boxStyle, color: "white" }}>
+                        <Box className="element">
                             <Text
+                                className="text-white"
                                 style={{
                                     fontSize: 13,
                                     marginRight: 5,
-                                    color: `${
-                                        theme === "light" ? "#FFF" : "#000"
-                                    }`,
                                 }}
                             >
                                 {i18n.t("footer_version")}
                             </Text>
                             <Text
+                                className="text-white"
                                 style={{
                                     fontSize: 16,
-                                    color: `${
-                                        theme === "light" ? "#FFF" : "#000"
-                                    }`,
                                 }}
                             >
                                 {VERSION}
                             </Text>
                         </Box>
                     )}
-                    <Box>
-                        <a href={link} target="_blank" rel="noreferrer">
-                            <Box style={boxStyle}>
-                                <Text color={`${theme}.logo`}>Powered by </Text>
-                                <Image
-                                    src={url}
-                                    h={
-                                        platform === "isDesktop"
-                                            ? "40px"
-                                            : "25px"
-                                    }
-                                    marginLeft={marginPowered}
-                                />
-                            </Box>
-                        </a>
-                    </Box>
                 </Box>
             </Box>
         </Box>
